@@ -1,65 +1,54 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
+const menu = [
+  {
+    href: "/register",
+    title: "시니어 프로필 등록",
+    description: "이름, 지역, 희망 직종, 경력을 입력해 일자리 매칭을 시작하세요.",
+    btnClass: "bg-blue-600 hover:bg-blue-700 text-white",
+  },
+  {
+    href: "/recommendations",
+    title: "추천 일자리 목록",
+    description: "등록된 프로필을 바탕으로 자동 매칭된 일자리를 점수순으로 확인하세요.",
+    btnClass: "bg-green-600 hover:bg-green-700 text-white",
+  },
+  {
+    href: "/admin",
+    title: "담당자 대시보드",
+    description: "미매칭·대기·배정 완료 현황을 한눈에 관리하세요.",
+    btnClass: "bg-purple-600 hover:bg-purple-700 text-white",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="space-y-8">
+      <section className="text-center space-y-3 py-8">
+        <h1 className="text-4xl font-bold text-blue-700">상상우리</h1>
+        <p className="text-2xl text-gray-700">시니어 ↔ 일자리 자동 매칭 시스템</p>
+        <p className="text-lg text-gray-500">
+          프로필을 등록하면 적합한 일자리를 자동으로 추천해 드립니다.
+        </p>
+      </section>
+
+      <div className="grid gap-6 sm:grid-cols-3">
+        {menu.map((item) => (
+          <Card key={item.href} className="border-2 hover:shadow-lg transition-shadow">
+            <CardHeader className="space-y-4">
+              <CardTitle className="text-xl">{item.title}</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                {item.description}
+              </CardDescription>
+              <Button asChild className={`w-full text-lg py-6 ${item.btnClass}`}>
+                <Link href={item.href}>바로 가기</Link>
+              </Button>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
