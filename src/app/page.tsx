@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 const menu = [
   {
@@ -42,9 +41,12 @@ export default function HomePage() {
               <CardDescription className="text-base leading-relaxed">
                 {item.description}
               </CardDescription>
-              <Button asChild className={`w-full text-lg py-6 ${item.btnClass}`}>
-                <Link href={item.href}>바로 가기</Link>
-              </Button>
+              <Link
+                href={item.href}
+                className={`flex items-center justify-center w-full rounded-lg text-lg font-semibold py-4 transition-opacity hover:opacity-90 ${item.btnClass}`}
+              >
+                바로 가기
+              </Link>
             </CardHeader>
           </Card>
         ))}
