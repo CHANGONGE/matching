@@ -121,6 +121,20 @@ export async function insertJobAction(
   return { success: true, newJob }
 }
 
+// ── 매칭 status 변경 ─────────────────────────────────────────────────────
+export type MatchStatus = 'pending' | 'assigned' | 'done'
+
+export async function updateMatchStatusAction(
+  matchId: string,
+  status: MatchStatus,
+): Promise<{ success: boolean }> {
+  const { error } = await supabase.from('matches').update({ status }).eq('id', matchId)
+  if (error) return { success: false }
+  revalidatePath('/recommendations')
+  revalidatePath('/admin')
+  return { success: true }
+}
+
 // ── 일자리 삭제 ──────────────────────────────────────────────────────────
 export async function deleteJobAction(jobId: string): Promise<{ success: boolean }> {
   // FK 제약 때문에 matches 먼저 삭제

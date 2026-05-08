@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { MatchStatusButton } from './match-status-button'
 import type { MatchWithJob } from '@/lib/supabase'
 
 export const metadata = {
@@ -14,10 +15,13 @@ function ScoreBadge({ score }: { score: number }) {
       : score >= 4
         ? 'bg-green-600 text-white'
         : 'bg-gray-400 text-white'
+  const label =
+    score === 6 ? '매우 적합' : score >= 4 ? '적합' : '보통'
   return (
-    <Badge className={`text-lg px-3 py-1 ${cls}`}>
-      {score}점
-    </Badge>
+    <div className="flex items-center gap-2">
+      <Badge className={`text-lg px-3 py-1 ${cls}`}>{score}점</Badge>
+      <span className="text-base font-medium text-gray-600">{label}</span>
+    </div>
   )
 }
 
@@ -65,17 +69,17 @@ export default async function RecommendationsPage({
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold text-gray-900">자동 매칭 추천 목록</h1>
-        <p className="text-lg text-gray-500">
-          <span className="font-semibold text-gray-800">{senior.name}</span>님 ({senior.region} ·{' '}
-          {senior.desired_job}) — 점수 높은 순
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold text-gray-900">{senior.name}님께 맞는 일자리</h1>
+        <p className="text-xl text-gray-600">
+          {senior.region} · {senior.desired_job} — 점수 높은 순
         </p>
       </div>
 
       {matches.length === 0 ? (
-        <div className="rounded-lg border-2 border-gray-300 bg-gray-50 px-6 py-8 text-center text-xl text-gray-500">
-          현재 매칭되는 일자리가 없습니다
+        <div className="rounded-lg border-2 border-gray-300 bg-gray-50 px-6 py-8 text-center space-y-2">
+          <p className="text-xl font-semibold text-gray-700">현재 매칭되는 일자리가 없습니다.</p>
+          <p className="text-lg text-gray-500">담당자가 직접 연락드리니 잠시만 기다려 주세요.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -104,6 +108,9 @@ export default async function RecommendationsPage({
                       ? `${match.jobs.required_career}년 이상`
                       : '무관'}
                   </span>
+                </div>
+                <div className="mt-4 border-t border-gray-100 pt-4">
+                  <MatchStatusButton matchId={match.id} status={match.status} />
                 </div>
               </CardContent>
             </Card>

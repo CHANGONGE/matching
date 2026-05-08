@@ -44,7 +44,7 @@ export function RegisterForm() {
       <CardContent>
         {state.success && (
           <div className="mb-6 rounded-lg border-2 border-green-500 bg-green-50 px-5 py-4 text-xl font-semibold text-green-800">
-            등록이 완료되었습니다
+            등록이 완료되었습니다. 담당자가 곧 연락드립니다.
           </div>
         )}
         {state.errors?.server && (
@@ -64,6 +64,7 @@ export function RegisterForm() {
             <Label htmlFor="name" className="text-lg font-semibold">
               이름 *
             </Label>
+            <p className="text-base text-gray-500">성함을 입력해 주세요.</p>
             <Input
               id="name"
               name="name"
@@ -81,6 +82,7 @@ export function RegisterForm() {
               </div>
             )}
             <Label className="text-lg font-semibold">지역 *</Label>
+            <p className="text-base text-gray-500">어디에서 일하고 싶으세요?</p>
             <Select
               name="region"
               value={region}
@@ -107,6 +109,7 @@ export function RegisterForm() {
               </div>
             )}
             <Label className="text-lg font-semibold">희망 직종 *</Label>
+            <p className="text-base text-gray-500">어떤 일을 하시겠어요?</p>
             <Select
               name="desired_job"
               value={desiredJob}
@@ -130,6 +133,7 @@ export function RegisterForm() {
             <Label htmlFor="career_years" className="text-lg font-semibold">
               경력 (년)
             </Label>
+            <p className="text-base text-gray-500">일하신 경력이 몇 년인가요? (없으시면 0을 입력하세요)</p>
             <Input
               id="career_years"
               name="career_years"
@@ -146,7 +150,7 @@ export function RegisterForm() {
             disabled={pending}
             className="h-14 w-full text-xl"
           >
-            {pending ? '등록 중...' : '프로필 등록하기'}
+            {pending ? '등록 중...' : '등록하기'}
           </Button>
         </form>
       </CardContent>

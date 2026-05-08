@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { AlertTriangle, Clock, CheckCircle } from 'lucide-react'
 import { JobManagementSection } from './job-section'
 import type { SeniorWithMatches } from '@/lib/supabase'
 
@@ -62,6 +63,7 @@ export default async function AdminPage() {
       color: 'bg-red-100 border-red-300',
       badgeClass: 'bg-red-500 text-white',
       desc: '매칭 점수가 없는 시니어',
+      icon: <AlertTriangle className="h-7 w-7 text-red-500" />,
     },
     {
       label: '매칭 대기',
@@ -69,6 +71,7 @@ export default async function AdminPage() {
       color: 'bg-yellow-100 border-yellow-300',
       badgeClass: 'bg-yellow-500 text-white',
       desc: '매칭 점수 있음, 배정 전',
+      icon: <Clock className="h-7 w-7 text-yellow-500" />,
     },
     {
       label: '배정 완료',
@@ -76,6 +79,7 @@ export default async function AdminPage() {
       color: 'bg-green-100 border-green-300',
       badgeClass: 'bg-green-600 text-white',
       desc: '배정 또는 완료 처리됨',
+      icon: <CheckCircle className="h-7 w-7 text-green-600" />,
     },
   ]
 
@@ -96,7 +100,10 @@ export default async function AdminPage() {
             <Card key={card.label} className={`border-2 ${card.color}`}>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl">{card.label}</CardTitle>
+                  <div className="flex items-center gap-2">
+                    {card.icon}
+                    <CardTitle className="text-xl">{card.label}</CardTitle>
+                  </div>
                   <Badge className={`text-lg px-3 py-1 ${card.badgeClass}`}>
                     {card.count}명
                   </Badge>
