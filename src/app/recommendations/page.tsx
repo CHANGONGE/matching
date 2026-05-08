@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -33,13 +34,98 @@ export default async function RecommendationsPage({
   const { senior_id } = await searchParams
 
   if (!senior_id) {
+    const { data: seniorsRaw } = await supabase
+      .from('seniors')
+      .select('id, name, region, desired_job, matches(score, jobs(title))')
+      .order('name', { ascending: true })
+
+    type SeniorRow = {
+      id: string
+      name: string
+      region: string
+      desired_job: string
+      matches: { score: number; jobs: { title: string } }[]
+    }
+
+    const seniors = (seniorsRaw ?? []) as unknown as SeniorRow[]
+
+    function getBestMatch(matches: { score: number; jobs: { title: string } }[]) {
+      if (!matches?.length) return null
+      const best = matches.reduce((a, b) => b.score > a.score ? b : a)
+      return best.score > 0 ? best : null
+    }
+
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">자동 매칭 추천 목록</h1>
-        <div className="rounded-lg border-2 border-blue-300 bg-blue-50 px-6 py-5 text-lg text-blue-800">
-          URL에 <code className="font-mono font-bold">?senior_id=...</code> 파라미터를 전달하면
-          해당 시니어의 매칭 결과를 확인할 수 있습니다.
+      <div className="space-y-6">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold text-gray-900">추천 일자리 목록</h1>
+          <p className="text-lg text-gray-500">이름 또는 USER ID를 클릭하면 해당 시니어의 추천 일자리를 확인할 수 있습니다.</p>
         </div>
+        <Card className="border-2">
+          <CardContent className="p-0">
+            {seniors.length === 0 ? (
+              <p className="py-10 text-center text-lg text-gray-400">등록된 시니어가 없습니다.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-base">
+                  <thead>
+                    <tr className="border-b-2 border-gray-200 bg-gray-50 text-left">
+                      <th className="px-4 py-3 font-semibold text-gray-700 whitespace-nowrap">성명</th>
+                      <th className="px-4 py-3 font-semibold text-gray-700 whitespace-nowrap">지역</th>
+                      <th className="px-4 py-3 font-semibold text-gray-700 whitespace-nowrap">희망 직종</th>
+                      <th className="px-4 py-3 font-semibold text-gray-700 whitespace-nowrap">최고 매칭 일자리</th>
+                      <th className="px-4 py-3 font-semibold text-gray-700 whitespace-nowrap">USER ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {seniors.map(s => {
+                      const best = getBestMatch(s.matches)
+                      const scoreColor =
+                        !best ? 'text-gray-400' :
+                        best.score === 6 ? 'bg-yellow-100 text-yellow-700' :
+                        best.score >= 4 ? 'bg-green-100 text-green-700' :
+                        'bg-gray-100 text-gray-600'
+                      return (
+                        <tr key={s.id} className="border-b border-gray-100 transition-colors hover:bg-blue-50">
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <Link
+                              href={`/recommendations?senior_id=${s.id}`}
+                              className="font-bold text-blue-600 hover:underline"
+                            >
+                              {s.name}
+                            </Link>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-gray-700">{s.region}</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-gray-700">{s.desired_job}</td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            {best ? (
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-900">{best.jobs.title}</span>
+                                <span className={`rounded-full px-2 py-0.5 text-sm font-bold whitespace-nowrap ${scoreColor}`}>
+                                  {best.score}점
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-gray-400">매칭 없음</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <Link
+                              href={`/recommendations?senior_id=${s.id}`}
+                              className="font-mono text-sm text-blue-500 hover:underline"
+                            >
+                              {s.id}
+                            </Link>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     )
   }

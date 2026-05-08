@@ -6,19 +6,16 @@ const menu = [
     href: "/register",
     title: "시니어 프로필 등록",
     description: "이름, 지역, 희망 직종, 경력을 입력해 일자리 매칭을 시작하세요.",
-    btnClass: "bg-blue-600 hover:bg-blue-700 text-white",
   },
   {
     href: "/recommendations",
     title: "추천 일자리 목록",
     description: "등록된 프로필을 바탕으로 자동 매칭된 일자리를 점수순으로 확인하세요.",
-    btnClass: "bg-green-600 hover:bg-green-700 text-white",
   },
   {
     href: "/admin",
     title: "담당자 대시보드",
     description: "미매칭·대기·배정 완료 현황을 한눈에 관리하세요.",
-    btnClass: "bg-purple-600 hover:bg-purple-700 text-white",
   },
 ];
 
@@ -35,17 +32,17 @@ export default function HomePage() {
 
       <div className="grid gap-6 sm:grid-cols-3">
         {menu.map((item) => (
-          <Card key={item.href} className="border-2 hover:shadow-lg transition-shadow">
-            <CardHeader className="space-y-4">
+          <Card key={item.href} className="border-2 hover:shadow-lg transition-shadow flex flex-col">
+            <CardHeader className="flex flex-col flex-1 space-y-4">
               <CardTitle className="text-xl">{item.title}</CardTitle>
-              <CardDescription className="text-base leading-relaxed">
+              <CardDescription className="text-base leading-relaxed flex-1">
                 {item.description}
               </CardDescription>
               <Link
                 href={item.href}
-                className={`flex items-center justify-center w-full rounded-lg text-lg font-semibold py-4 transition-opacity hover:opacity-90 ${item.btnClass}`}
+                className="flex items-center justify-center w-full rounded-lg text-lg font-semibold py-4 transition-opacity hover:opacity-90 bg-green-600 hover:bg-green-700 text-white mt-auto"
               >
-                바로 가기
+                연결
               </Link>
             </CardHeader>
           </Card>

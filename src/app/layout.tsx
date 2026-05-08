@@ -24,7 +24,7 @@ export default function RootLayout({
         <header className="bg-blue-700 text-white shadow-md">
           <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-8">
             <Link href="/" className="text-2xl font-bold tracking-tight hover:opacity-90">
-              상상우리
+              매칭시스템
             </Link>
             <nav className="flex gap-6 text-lg font-medium">
               <Link href="/register" className="hover:text-blue-200 transition-colors">
